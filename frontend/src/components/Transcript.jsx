@@ -58,8 +58,8 @@ const Transcript = ({ messages }) => {
 
       <style>{`
         .transcript-wrapper {
-            width: 90%;
-            max-width: 700px;
+            width: 700px;
+            max-width: 90vw;
             height: 300px;
             min-height: 300px;
             max-height: 300px;
