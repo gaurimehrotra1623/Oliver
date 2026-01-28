@@ -117,6 +117,40 @@ def get_llm_response(user_text):
     print(f"Oliver: {reply}")
     return reply
 
+def text_to_speech(text):
+    global assistant_speaking
+    print("Speaking...")
+    assistant_speaking = True
+    try:
+        response = groq_client.audio.speech.create(
+            model="canopylabs/orpheus-v1-english",
+            voice="troy", 
+            input=text,
+            response_format="wav"
+        )
+        temp_audio = "temp_tts.wav"
+        response.write_to_file(temp_audio)
+        audio_data, sr = sf.read(temp_audio)
+        fade_duration = int(sr * 0.05)
+        if len(audio_data) > fade_duration:
+            fade = np.linspace(1, 0, fade_duration)
+            audio_data[-fade_duration:] *= fade
+        sd.play(audio_data, sr)
+        sd.wait()
+        if os.path.exists(temp_audio):
+            os.remove(temp_audio)
+        print("Done speaking\n")
+    except Exception as e:
+        print(f"TTS Error: {e}")
+    finally:
+        assistant_speaking = False
+def process_user_speech(audio_np):
+    user_text = transcribe_audio(audio_np)
+    if len(user_text.strip()) < 2:
+        return
+    reply = get_llm_response(user_text)
+    text_to_speech(reply)
+    print("=" * 50)
 
 speech_frames = []
 is_recording = False
@@ -156,7 +190,7 @@ try:
                 if MIN_SPEECH_DURATION <= duration <= MAX_SPEECH_DURATION:
                     audio = np.concatenate(speech_frames)
                     threading.Thread(
-
+                        target=process_user_speech,
                         args=(audio,),
                         daemon=True
                     ).start()

@@ -1,0 +1,201 @@
+:root {
+  --bg-color: #030305;
+  --text-primary: #e0e6ed;
+  --text-secondary: #94a3b8;
+  --accent-primary: #00f3ff;
+  --accent-secondary: #7000ff;
+  --accent-alert: #ff0055;
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(10, 10, 20, 0.6);
+  --orb-size: 220px;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  /* Subtle grain or scanline effect could be added here via pseudo-element */
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.background-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(112, 0, 255, 0.05) 0%, transparent 50%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 243, 255, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+}
+
+.background-grid {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background-image:
+    linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(500px) rotateX(60deg);
+  animation: grid-move 20s linear infinite;
+  pointer-events: none;
+  z-index: -9;
+}
+
+@keyframes grid-move {
+  0% {
+    transform: perspective(500px) rotateX(60deg) translateY(0);
+  }
+
+  100% {
+    transform: perspective(500px) rotateX(60deg) translateY(40px);
+  }
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+  z-index: 10;
+  position: relative;
+}
+
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 0.5rem;
+  font-size: 5rem;
+  margin: 0;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(0, 243, 255, 0.5),
+    0 0 20px rgba(0, 243, 255, 0.3),
+    0 0 40px rgba(0, 243, 255, 0.1);
+  background: linear-gradient(180deg, #fff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  color: var(--accent-primary);
+  font-size: 1.2rem;
+  letter-spacing: 0.8rem;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  text-shadow: 0 0 8px var(--accent-primary);
+  opacity: 0.8;
+}
+
+.status-bracket {
+  display: inline-block;
+  color: var(--accent-secondary);
+  margin: 0 0.5rem;
+  font-weight: bold;
+}
+
+.status-text {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-size: 1rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  margin-top: 2rem;
+  padding: 0.5rem 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.instruction-text {
+  font-family: var(--font-body);
+  color: var(--accent-secondary);
+  font-size: 0.9rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  opacity: 0.8;
+  text-shadow: 0 0 5px rgba(112, 0, 255, 0.3);
+}
+
+.content {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.orb-wrapper {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-primary);
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
