@@ -11,7 +11,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from groq import Groq
 
-load_dotenv(dotenv_path="backend/.env")
+load_dotenv()
 
 app = FastAPI()
 app.add_middleware(

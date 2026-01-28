@@ -76,7 +76,8 @@ function App() {
     formData.append('file', audioBlob, 'recording.wav');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/process-audio', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+      const response = await fetch(`${apiUrl}/api/process-audio`, {
         method: 'POST',
         body: formData,
       });
