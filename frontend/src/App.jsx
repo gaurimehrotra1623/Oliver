@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Orb from './components/Orb';
+import Transcript from './components/Transcript';
 import './styles/main.css';
 
 function App() {
   const [status, setStatus] = useState('idle');
+  const [messages, setMessages] = useState([]);
   const statusRef = useRef('idle');
 
   const mediaRecorder = useRef(null);
@@ -22,6 +24,15 @@ function App() {
       }
     };
   }, []);
+
+  const addMessage = (sender, text) => {
+    const newMessage = {
+      id: Date.now(),
+      sender,
+      text,
+    };
+    setMessages((prev) => [...prev, newMessage]);
+  };
 
   const startRecording = async () => {
     try {
@@ -75,6 +86,19 @@ function App() {
       }
 
       const data = await response.json();
+
+      // Handle transcript
+      if (data.user_text) {
+        addMessage('user', data.user_text);
+      } else {
+        // Fallback if backend doesn't return text yet
+        // addMessage('user', "Audio sent..."); 
+      }
+
+      if (data.ai_text) {
+        // Delay slightly for dramatic effect or sync with audio
+        setTimeout(() => addMessage('ai', data.ai_text), 500);
+      }
 
       if (data.audio_base64) {
         updateStatus('speaking');
@@ -132,24 +156,44 @@ function App() {
           <p className="subtitle">YOUR PERSONAL VOICE ASSISTANT</p>
         </div>
 
-        <div className="status-text fade-in" style={{ animationDelay: '0.2s' }}>
-          <span className="status-indicator"></span>
-          <span className="status-bracket">[</span>
-          {status === 'idle' && "SYSTEM READY"}
-          {status === 'listening' && "AWAITING INPUT"}
-          {status === 'processing' && "PROCESSING DATA"}
-          {status === 'speaking' && "AUDIO OUTPUT"}
-          <span className="status-bracket">]</span>
+        <div className="transcript-container-wrapper">
+          {/* Show transcript if not idle OR if we have messages in history */}
+          {(status !== 'idle' || messages.length > 0) && (
+            <div className="transcript-container fade-in">
+              <Transcript messages={messages} />
+            </div>
+          )}
         </div>
 
-        <h2 className="instruction-text fade-in" style={{ animationDelay: '0.3s' }}>
-          {status === 'idle' ? "TAP THE ORB TO START SPEAKING" : "TAP THE ORB TO STOP"}
-        </h2>
+        <div className="bottom-section">
+          <div className="status-text fade-in">
+            <span className="status-indicator"></span>
+            <span className="status-bracket">[</span>
+            {status === 'idle' && "SYSTEM READY"}
+            {status === 'listening' && "AWAITING INPUT"}
+            {status === 'processing' && "PROCESSING DATA"}
+            {status === 'speaking' && "AUDIO OUTPUT"}
+            <span className="status-bracket">]</span>
+          </div>
 
-        <div className="orb-wrapper fade-in" style={{ animationDelay: '0.4s' }} onClick={handleOrbClick}>
-          <Orb state={status} />
+          <h2 className="instruction-text fade-in">
+            {status === 'idle' ? "TAP THE ORB TO START SPEAKING" : "TAP THE ORB TO STOP"}
+          </h2>
+
+          <div className="orb-wrapper fade-in" onClick={handleOrbClick}>
+            <Orb state={status} />
+          </div>
         </div>
       </div>
+
+      <style>{`
+        .transcript-container {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          /* Styles handled by main.css wrapper mostly, but keeping this for internal component alignment */
+        }
+      `}</style>
     </div>
   );
 }

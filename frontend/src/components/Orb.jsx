@@ -38,7 +38,7 @@ const Orb = ({ state }) => {
 
       gsap.to(coreRef.current, {
         duration: 3,
-        scale: 1.1,
+        scale: 1.05,
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut"
@@ -46,11 +46,12 @@ const Orb = ({ state }) => {
 
       gsap.to(ring1Ref.current, {
         duration: 10,
-        rotation: 360,
+        rotation: 360, // GSAP handles this as rotationZ by default
         repeat: -1,
         ease: "none",
-        border: '4px solid rgba(0, 243, 255, 0.4)', // Thicker borders
-        scale: 1.2
+        border: '4px solid rgba(0, 243, 255, 0.4)',
+        scale: 1.1,
+        transformOrigin: "50% 50%"
       });
 
       gsap.to(ring2Ref.current, {
@@ -59,13 +60,14 @@ const Orb = ({ state }) => {
         repeat: -1,
         ease: "none",
         border: '2px solid rgba(112, 0, 255, 0.4)',
-        scale: 1.4
+        scale: 1.2,
+        transformOrigin: "50% 50%"
       });
 
     } else if (state === 'listening') {
-      // LISTENING: Core turns purple/active, ripple effect
+      // LISTENING
       gsap.to(coreRef.current, {
-        scale: 1.2,
+        scale: 1.1,
         backgroundColor: '#7000ff',
         boxShadow: '0 0 100px rgba(112, 0, 255, 0.8), inset 0 0 60px rgba(255, 255, 255, 0.5)',
         duration: 0.5
@@ -73,7 +75,7 @@ const Orb = ({ state }) => {
 
       gsap.to(coreRef.current, {
         duration: 0.5,
-        scale: 1.15,
+        scale: 1.05,
         repeat: -1,
         yoyo: true,
         ease: "power1.inOut"
@@ -89,12 +91,12 @@ const Orb = ({ state }) => {
         borderLeftColor: '#7000ff',
         borderRightColor: 'transparent',
         borderWidth: '6px',
-        scale: 1.3
+        scale: 1.15
       });
 
       gsap.to(ring2Ref.current, {
         duration: 1,
-        scale: 1.6,
+        scale: 1.3,
         opacity: 0,
         border: '4px solid #7000ff',
         repeat: -1,
@@ -102,10 +104,10 @@ const Orb = ({ state }) => {
       });
 
     } else if (state === 'processing') {
-      // PROCESSING: Glitch/Search movement
+      // PROCESSING
       gsap.to(coreRef.current, {
         scale: 1,
-        backgroundColor: '#ff0055', // Alert/Processing color
+        backgroundColor: '#ff0055',
         boxShadow: '0 0 90px rgba(255, 0, 85, 0.7)',
         duration: 0.2
       });
@@ -116,7 +118,7 @@ const Orb = ({ state }) => {
         repeat: -1,
         ease: "linear",
         border: '4px dashed #ff0055',
-        scale: 1.3
+        scale: 1.2
       });
 
     } else if (state === 'speaking') {
@@ -140,7 +142,7 @@ const Orb = ({ state }) => {
       }
 
       gsap.to(coreRef.current, {
-        scale: 1.3,
+        scale: 1.2,
         duration: 1,
         repeat: -1,
         yoyo: true,
@@ -148,7 +150,7 @@ const Orb = ({ state }) => {
       });
 
       gsap.to(ring1Ref.current, {
-        scale: 1.8,
+        scale: 1.4,
         opacity: 0.5,
         duration: 2,
         repeat: -1,
@@ -194,18 +196,19 @@ const Orb = ({ state }) => {
           display: flex;
           justify-content: center;
           align-items: center;
-          /* Filter for "Glow" bleed */
-          filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+          transform-style: preserve-3d;
+          perspective: 500px; /* Add depth */
         }
 
         .orb-core {
-          width: 60%; /* Larger core */
+          width: 60%;
           height: 60%;
           border-radius: 50%;
           background: #00f3ff;
           z-index: 10;
           position: relative;
-          box-shadow: 0 0 60px rgba(0, 243, 255, 0.6); /* Default Fallback */
+          box-shadow: 0 0 60px rgba(0, 243, 255, 0.6);
+          /* Core remains facing viewer or slightly tilted if desired */
         }
 
         .orb-ring {
@@ -213,7 +216,8 @@ const Orb = ({ state }) => {
           border-radius: 50%;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%);
+          /* Initialize with rotation for floor effect */
+          transform: translate(-50%, -50%) rotateX(75deg); 
           z-index: 1;
           width: 100%;
           height: 100%;

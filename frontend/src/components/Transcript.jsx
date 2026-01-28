@@ -58,100 +58,128 @@ const Transcript = ({ messages }) => {
 
       <style>{`
         .transcript-wrapper {
-            width: 100%;
+            width: 90%;
             max-width: 700px;
-            height: 250px;
-            margin-top: 3rem;
+            height: 300px;
+            min-height: 300px;
+            max-height: 300px;
+            flex-shrink: 0;
+            margin-top: 1rem;
             position: relative;
-            /* Fade out top mask */
-            mask-image: linear-gradient(to bottom, transparent, black 20%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
+            
+            /* Glass Panel Look */
+            background: rgba(10, 20, 30, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            border-radius: 12px;
+            box-shadow: 
+                0 0 15px rgba(0, 243, 255, 0.1),
+                inset 0 0 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            
+            /* Inner glow accent on top */
+            background-image: linear-gradient(to bottom, rgba(0, 243, 255, 0.1) 0%, transparent 40%);
         }
         
         .transcript-overlay {
             width: 100%;
             height: 100%;
-            overflow-y: hidden; /* We scroll programmatically */
+            overflow-y: auto;
+            overflow-x: hidden;
             position: relative;
+            padding: 1.5rem;
+            box-sizing: border-box;
+
+            /* Scrollbar Styling */
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-primary) rgba(0,0,0,0.3);
+        }
+
+        .transcript-overlay::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .transcript-overlay::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .transcript-overlay::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
         }
 
         .transcript-list {
-            padding: 1rem;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            justify-content: flex-end;
-            min-height: 100%;
+            justify-content: flex-start;
+            min-height: min-content;
         }
         
         .msg-item {
             display: flex;
             width: 100%;
-            opacity: 0; /* Handled by GSAP */
+            opacity: 0;
+            flex-direction: column; 
+            gap: 0.3rem;
+            overflow: hidden; /* Ensure content doesn't burst out */
         }
         
         .msg-item.user {
-            justify-content: flex-end;
-            text-align: right;
+            align-items: flex-start;
         }
         
         .msg-item.ai {
-            justify-content: flex-start;
-            text-align: left;
+            align-items: flex-start;
         }
         
         .msg-content {
-            max-width: 85%;
+            max-width: 100%;
             position: relative;
+            padding-left: 1rem;
+            border-left: 3px solid transparent; 
+        }
+        
+        /* Accents based on sender */
+        .user .msg-content {
+             border-left-color: var(--accent-primary); 
+        }
+        
+        .ai .msg-content {
+             border-left-color: transparent; 
+             padding-left: 0; 
+             margin-top: 0.5rem;
         }
         
         .msg-role {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.15rem;
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 0.4rem;
-            opacity: 0.6;
-            font-family: 'Courier New', monospace;
+            display: none; 
         }
-        
-        .user .msg-role { color: var(--accent-secondary); }
-        .ai .msg-role { color: var(--accent-primary); }
         
         .msg-text {
-            font-size: 1.1rem;
+            font-family: var(--font-body);
+            font-size: 1.2rem;
             line-height: 1.5;
-            color: rgba(255, 255, 255, 0.95);
-            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
             margin: 0;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            word-wrap: break-word; /* Ensure long words wrap */
+            word-break: break-word;
         }
         
-        /* Decorative line for AI */
-        .ai .msg-content::before {
-            content: '';
-            position: absolute;
-            left: -1rem;
-            top: 0.5rem;
-            bottom: 0.5rem;
-            width: 2px;
-            background: var(--accent-primary);
-            box-shadow: 0 0 10px var(--accent-primary);
-            opacity: 0.5;
+        /* Specific coloring for message text */
+        .user .msg-text {
+            font-size: 1.3rem;
+            color: var(--accent-primary); /* Cyan question */
+            font-weight: 500;
         }
         
-        /* Decorative line for User */
-        .user .msg-content::after {
-            content: '';
-            position: absolute;
-            right: -1rem;
-            top: 0.5rem;
-            bottom: 0.5rem;
-            width: 2px;
-            background: var(--accent-secondary);
-            box-shadow: 0 0 10px var(--accent-secondary);
-            opacity: 0.5;
+        .ai .msg-text {
+            font-size: 1.1rem;
+            color: #ccc; /* Subtler answer */
         }
 
       `}</style>

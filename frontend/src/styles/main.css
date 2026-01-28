@@ -7,7 +7,7 @@
   --accent-alert: #ff0055;
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-bg: rgba(10, 10, 20, 0.6);
-  --orb-size: 140px;
+  --orb-size: 100px;
   --font-display: 'Orbitron', sans-serif;
   --font-body: 'Rajdhani', sans-serif;
 }
@@ -75,103 +75,103 @@ body {
   }
 }
 
-.header-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 3rem;
-  z-index: 10;
-  position: relative;
-}
-
-.app-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  letter-spacing: 0.5rem;
-  font-size: 5rem;
-  margin: 0;
-  color: #fff;
-  text-shadow:
-    0 0 10px rgba(0, 243, 255, 0.5),
-    0 0 20px rgba(0, 243, 255, 0.3),
-    0 0 40px rgba(0, 243, 255, 0.1);
-  background: linear-gradient(180deg, #fff 0%, #a5b4fc 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-}
-
-.subtitle {
-  font-family: var(--font-body);
-  color: var(--accent-primary);
-  font-size: 1.2rem;
-  letter-spacing: 0.8rem;
-  text-transform: uppercase;
-  margin-top: 0.5rem;
-  font-weight: 600;
-  text-shadow: 0 0 8px var(--accent-primary);
-  opacity: 0.8;
-}
-
-.status-bracket {
-  display: inline-block;
-  color: var(--accent-secondary);
-  margin: 0 0.5rem;
-  font-weight: bold;
-}
-
-.status-text {
-  font-family: var(--font-display);
-  color: var(--text-primary);
-  font-size: 1rem;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
-  margin-top: 2rem;
-  padding: 0.5rem 1.5rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(4px);
-  border-radius: 4px;
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.instruction-text {
-  font-family: var(--font-body);
-  color: var(--accent-secondary);
-  font-size: 0.9rem;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  opacity: 0.8;
-  text-shadow: 0 0 5px rgba(112, 0, 255, 0.3);
-}
-
 .content {
   z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
+  /* Take full height */
+  justify-content: space-between;
+  /* Space out header, middle, bottom */
+  padding: 2rem 0;
+  /* Add padding prevent edge touching */
+  box-sizing: border-box;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+  z-index: 10;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 6rem;
+  font-weight: 900;
+  letter-spacing: 0.5rem;
+  margin: 0;
+
+  /* Continuous Metallic Shimmer Gradient */
+  background: linear-gradient(110deg,
+      #22d3ee 10%,
+      #00f3ff 20%,
+      #e0ffff 30%,
+      #ffffff 40%,
+      #e0ffff 50%,
+      #00f3ff 60%,
+      #22d3ee 70%,
+      #00b4d8 80%,
+      #22d3ee 90%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  /* Intense Radiant Glow */
+  filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.6)) drop-shadow(0 0 40px rgba(0, 243, 255, 0.4));
+
+  /* Faster, continuous shimmer */
+  animation: text-shine 3s linear infinite;
+  text-align: center;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  letter-spacing: 0.4rem;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  font-weight: 400;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* Middle area for transcript */
+.transcript-container-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  padding: 1rem 0;
+}
+
+
+
+/* Bottom section for controls */
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .orb-wrapper {
-  margin-top: 4rem;
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -179,13 +179,117 @@ body {
   cursor: pointer;
 }
 
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  background-color: var(--accent-primary);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent-primary);
-  animation: blink 2s infinite;
+.status-text {
+  font-family: var(--font-display);
+  color: #fff;
+  font-size: 0.9rem;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  padding: 0.6rem 2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  border-radius: 50px;
+  /* Pill shape */
+  box-shadow:
+    0 0 10px rgba(0, 243, 255, 0.1),
+    inset 0 0 20px rgba(0, 243, 255, 0.05);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 200px;
+  justify-content: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --orb-size: 120px;
+  }
+
+  .content {
+    padding: 1rem 0;
+  }
+
+  .title {
+    font-size: 3rem;
+    letter-spacing: 0.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    letter-spacing: 0.3rem;
+  }
+
+  .status-text {
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .orb-wrapper {
+    margin-top: 1.5rem;
+  }
+
+  .bottom-section {
+    margin-bottom: 1rem;
+  }
+
+  .instruction-text {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --orb-size: 100px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+    letter-spacing: 0.1rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.2rem;
+  }
+
+  .status-text {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .instruction-text {
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
+  }
+
+  .bottom-section {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Ensure content fits on short screens */
+@media (max-height: 800px) {
+  .content {
+    padding: 0.5rem 0;
+  }
+
+  .bottom-section {
+    margin-bottom: 0.5rem;
+  }
+
+  .orb-wrapper {
+    margin-top: 1rem;
+  }
 }
 
 @keyframes blink {
@@ -197,5 +301,11 @@ body {
 
   50% {
     opacity: 0.3;
+  }
+}
+
+@keyframes text-shine {
+  to {
+    background-position: 200% center;
   }
 }
