@@ -143,7 +143,7 @@ function App() {
         </div>
 
         <h2 className="instruction-text fade-in" style={{ animationDelay: '0.3s' }}>
-          TAP THE ORB TO START SPEAKING
+          {status === 'idle' ? "TAP THE ORB TO START SPEAKING" : "TAP THE ORB TO STOP"}
         </h2>
 
         <div className="orb-wrapper fade-in" style={{ animationDelay: '0.4s' }} onClick={handleOrbClick}>

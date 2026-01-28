@@ -10,7 +10,7 @@ const Orb = ({ state }) => {
   const ring1Ref = useRef(null);
   const ring2Ref = useRef(null);
   const ring3Ref = useRef(null);
-  const particlesRef = useRef(null);
+  const turbulenceRef = useRef(null);
 
   useGSAP(() => {
     // Initial setup
@@ -21,66 +21,59 @@ const Orb = ({ state }) => {
     const tl = gsap.timeline();
 
     // Reset animations when state changes
-    gsap.killTweensOf([coreRef.current, ring1Ref.current, ring2Ref.current, ring3Ref.current, particlesRef.current]);
+    gsap.killTweensOf([coreRef.current, ring1Ref.current, ring2Ref.current, ring3Ref.current]);
+
+    // Reset filter
+    gsap.to(coreRef.current, { filter: 'none', duration: 0.2 });
 
     if (state === 'idle') {
-      // IDLE STATE: Calm, breathing, slow rotation
+      // IDLE: Solid pulsing core, slow rotating rings
       gsap.to(coreRef.current, {
         scale: 1,
-        boxShadow: '0 0 60px var(--accent-glow)',
-        backgroundColor: '#000',
+        backgroundColor: '#00f3ff', // Bright Cyan base
+        boxShadow: '0 0 80px rgba(0, 243, 255, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.8)', // Strong inner/outer glow
         duration: 2,
         ease: 'power2.inOut'
       });
 
       gsap.to(coreRef.current, {
-        duration: 4,
-        scale: 1.05,
+        duration: 3,
+        scale: 1.1,
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut"
       });
 
       gsap.to(ring1Ref.current, {
-        duration: 20,
+        duration: 10,
         rotation: 360,
         repeat: -1,
         ease: "none",
-        border: '1px solid rgba(0, 243, 255, 0.3)',
-        scale: 1
+        border: '4px solid rgba(0, 243, 255, 0.4)', // Thicker borders
+        scale: 1.2
       });
 
       gsap.to(ring2Ref.current, {
-        duration: 30,
+        duration: 15,
         rotation: -360,
         repeat: -1,
         ease: "none",
-        border: '1px solid rgba(112, 0, 255, 0.2)',
-        scale: 1
-      });
-
-      gsap.to(ring3Ref.current, {
-        duration: 40,
-        rotation: 180,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        border: '1px dashed rgba(255, 255, 255, 0.1)',
-        scale: 1
+        border: '2px solid rgba(112, 0, 255, 0.4)',
+        scale: 1.4
       });
 
     } else if (state === 'listening') {
-      // LISTENING STATE: Alert, focus, pulsing
+      // LISTENING: Core turns purple/active, ripple effect
       gsap.to(coreRef.current, {
-        scale: 0.8,
-        boxShadow: '0 0 80px var(--accent-primary)',
-        backgroundColor: 'var(--accent-primary)',
+        scale: 1.2,
+        backgroundColor: '#7000ff',
+        boxShadow: '0 0 100px rgba(112, 0, 255, 0.8), inset 0 0 60px rgba(255, 255, 255, 0.5)',
         duration: 0.5
       });
 
       gsap.to(coreRef.current, {
-        duration: 0.8,
-        scale: 0.9,
+        duration: 0.5,
+        scale: 1.15,
         repeat: -1,
         yoyo: true,
         ease: "power1.inOut"
@@ -91,99 +84,76 @@ const Orb = ({ state }) => {
         rotation: 360,
         repeat: -1,
         ease: "none",
-        borderTopColor: 'var(--accent-primary)',
+        borderTopColor: '#7000ff',
         borderBottomColor: 'transparent',
-        borderLeftColor: 'var(--accent-primary)',
+        borderLeftColor: '#7000ff',
         borderRightColor: 'transparent',
-        borderWidth: '2px',
-        scale: 1.1
+        borderWidth: '6px',
+        scale: 1.3
       });
 
       gsap.to(ring2Ref.current, {
-        duration: 3,
-        rotation: -360,
-        repeat: -1,
-        ease: "none",
-        border: '1px solid var(--accent-primary)',
-        opacity: 0.5,
-        scale: 1.2
-      });
-
-      gsap.to(ring3Ref.current, {
-        scale: 1.5,
-        opacity: 0,
         duration: 1,
+        scale: 1.6,
+        opacity: 0,
+        border: '4px solid #7000ff',
         repeat: -1,
         ease: "power2.out"
       });
 
     } else if (state === 'processing') {
-      // PROCESSING STATE: Busy, glitchy, rapid movement
+      // PROCESSING: Glitch/Search movement
       gsap.to(coreRef.current, {
-        boxShadow: '0 0 100px var(--accent-secondary)',
-        backgroundColor: 'var(--accent-secondary)',
+        scale: 1,
+        backgroundColor: '#ff0055', // Alert/Processing color
+        boxShadow: '0 0 90px rgba(255, 0, 85, 0.7)',
         duration: 0.2
       });
 
-      // Glitch effect on core
-      const glitchTl = gsap.timeline({ repeat: -1 });
-      glitchTl.to(coreRef.current, { scale: 1.2, duration: 0.1, ease: 'steps(1)' })
-        .to(coreRef.current, { scale: 0.8, duration: 0.1, ease: 'steps(1)' })
-        .to(coreRef.current, { scale: 1.1, rotation: 10, duration: 0.1 })
-        .to(coreRef.current, { scale: 1, rotation: -10, duration: 0.1 });
-
       gsap.to(ring1Ref.current, {
-        duration: 1,
+        duration: 0.5,
         rotation: 360,
         repeat: -1,
-        ease: "none",
-        border: '2px solid var(--accent-secondary)',
-        borderStyle: 'dashed'
-      });
-
-      gsap.to(ring2Ref.current, {
-        duration: 1.5,
-        rotation: -360,
-        repeat: -1,
-        ease: "none",
-        border: '2px solid #fff',
-        opacity: 0.8
+        ease: "linear",
+        border: '4px dashed #ff0055',
+        scale: 1.3
       });
 
     } else if (state === 'speaking') {
-      // SPEAKING STATE: Audio reactive simulation, expanding
-      gsap.to(coreRef.current, {
-        backgroundColor: '#fff',
-        boxShadow: '0 0 120px #fff',
-        duration: 0.2
+      // SPEAKING: Fluid Watery Effect
+      // Apply the SVG filter
+      gsap.set(coreRef.current, {
+        filter: 'url(#fluid-filter)',
+        backgroundColor: '#00f3ff',
+        boxShadow: '0 0 100px rgba(0, 243, 255, 0.8)'
       });
 
-      // Simulated voice wave modulation
+      // Animate turbulence to simulate liquid movement
+      if (turbulenceRef.current) {
+        gsap.to(turbulenceRef.current, {
+          attr: { baseFrequency: '0.01 0.02' },
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
+      }
+
       gsap.to(coreRef.current, {
-        scale: 1.5,
-        duration: 0.2,
+        scale: 1.3,
+        duration: 1,
         repeat: -1,
         yoyo: true,
-        ease: "power1.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(ring1Ref.current, {
-        scale: 2,
-        opacity: 0,
-        duration: 1,
+        scale: 1.8,
+        opacity: 0.5,
+        duration: 2,
         repeat: -1,
-        ease: "power2.out",
-        border: '2px solid #fff'
-      });
-
-      gsap.to(ring2Ref.current, {
-        scale: 1.5,
-        opacity: 0,
-        duration: 1.2,
-        repeat: -1,
-        ease: "power2.out",
-        delay: 0.2,
-        border: '1px solid var(--accent-primary)'
+        border: '2px solid rgba(0, 243, 255, 0.5)',
+        ease: "sine.inOut"
       });
     }
 
@@ -191,12 +161,30 @@ const Orb = ({ state }) => {
 
   return (
     <div className="orb-container" ref={containerRef}>
+      {/* SVG Filter Definition */}
+      <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+        <filter id="fluid-filter">
+          <feTurbulence
+            ref={turbulenceRef}
+            type="fractalNoise"
+            baseFrequency="0.01 0.05"
+            numOctaves="3"
+            result="warp"
+          />
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="30"
+            in="SourceGraphic"
+            in2="warp"
+          />
+        </filter>
+      </svg>
+
       <div className="orb-ring ring-3" ref={ring3Ref}></div>
       <div className="orb-ring ring-2" ref={ring2Ref}></div>
       <div className="orb-ring ring-1" ref={ring1Ref}></div>
-      <div className="orb-core" ref={coreRef}>
-        <div className="inner-pulse"></div>
-      </div>
+      <div className="orb-core" ref={coreRef}></div>
 
       <style>{`
         .orb-container {
@@ -206,25 +194,18 @@ const Orb = ({ state }) => {
           display: flex;
           justify-content: center;
           align-items: center;
+          /* Filter for "Glow" bleed */
+          filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
         }
 
         .orb-core {
-          width: 50%;
-          height: 50%;
+          width: 60%; /* Larger core */
+          height: 60%;
           border-radius: 50%;
-          background: #000; /* Placeholder, animated by GSAP */
+          background: #00f3ff;
           z-index: 10;
           position: relative;
-        }
-        
-        .inner-pulse {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-            mix-blend-mode: overlay;
+          box-shadow: 0 0 60px rgba(0, 243, 255, 0.6); /* Default Fallback */
         }
 
         .orb-ring {
@@ -236,7 +217,7 @@ const Orb = ({ state }) => {
           z-index: 1;
           width: 100%;
           height: 100%;
-          box-shadow: 0 0 15px rgba(0,0,0,0.5); /* subtle depth */
+          box-shadow: 0 0 15px rgba(0,0,0,0.3);
         }
       `}</style>
     </div>
